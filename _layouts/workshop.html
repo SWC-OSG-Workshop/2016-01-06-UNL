@@ -28,6 +28,7 @@
 	    <div class="span6">
               <p>{{page.humandate}}</p>
               <p>{% if page.humantime %}{{page.humantime}}{% endif %}</p>
+	      {% if page.registration %}<p><a class="btn btn-large btn-primary" href="{{page.registration}}">Register Here</a></p>{% endif %}
 	    </div>
 	    <div class="span6">
 	      <p>

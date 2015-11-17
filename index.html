@@ -1,18 +1,19 @@
 ---
 layout: bootcamp
 root: .
-venue: University of -----
-address: City, State 
+venue: University of Nebraska - Lincoln
+address: Lincoln, NE
 country: United States
-humandate: Month date year
+humandate: Jan. 6-8, 2016
 humantime: 8:30 am - 4:30 pm
-startdate: MON-DD-YYYY 
-enddate: MON-DD-YYYY
-latlng: 41.791046, -87.601077
-registration: restricted
-instructor: ["Mats Rynge, Lauren Michael, Balamurugan Desinghu, Suchandra Thapa, David Champion, Lincoln Bryant"]
-helper: ["Instructors"]
-contact: balamurugan@uchicago.edu
+startdate: JAN-06-2016 
+enddate: JAN-08-2016
+latlng: 40.821798, -96.688613
+registration: http://marketplace.unl.edu
+instructor: ["Emelie Harstad, Mats Rynge, Balamurugan Desinghu, Suchandra Thapa, David Champion, Lincoln Bryant"]
+helper: ["Derek Weitzel, Adam Caprez, Natasha Pavlovikj, Jingchao Zhang, Rob Gardner, David Swanson"]
+contact: eharstad@unl.edu
+etherpad: https://public.etherpad-mozilla.org/p/2016-01-06-UNL
 ---
     
 
@@ -32,7 +33,7 @@ contact: balamurugan@uchicago.edu
 
 <p>
   The <a href="http://www.opensciencegrid.org">Open Science Grid</a> (OSG) is a national scale distributed 
-  infrastructure for scientific computing.  Users can use <a href="http://osgconnect.net">OSG Connect</a>
+  infrastructure for scientific computing.  Users affiliated with the University of Nebraska can use <a href="http://hcc.unl.edu">the Holland Computing Center (HCC) </a>
   to easily gain access to the resources that OSG provides. The OSG also offers training and tutorials for the 
   scientists and researchers across USA. As part of our training service we are offering an extended Software Carpentry workshop 
 which augments instruction on basic Linux tools and programming with 
@@ -120,10 +121,13 @@ Participants will be encouraged to help one another
 
 <hr/>
 
+{% if page.registration %}
 <h2>Registration</h2>
 <p>
-To register, or to get more information, please, visit the -----
+Event is free but registration required. Space is limited for the event. To register,  please <a href="{{page.registration}}"> visit here </a>.
 </p>
+{% endif %}
+
 <hr/>
 
 <h2>Schedule</h2>
@@ -170,6 +174,14 @@ To register, or to get more information, please, visit the -----
 </div>
 
 <hr/>
+
+{% if page.etherpad %}
+<p>
+  <strong>Etherpad:</strong> <a href="{{page.etherpad}}">{{page.etherpad}}</a>.
+  <br/>
+  We will use this Etherpad for chatting, taking notes, and sharing URLs and bits of code.
+</p>
+{% endif %}
 
 <!--
     Edit this block to show what topics will be covered.
