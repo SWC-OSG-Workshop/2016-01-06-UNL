@@ -8,8 +8,8 @@ title: Introduction to Open Science Grid
 #### Objectives
 *   Get to know what is Open Science Grid
 *   What resources are open to academic researchers
-*   Computation that is a good match for OSG Connect
-*   Computation that is NOT a good match for OSG Connect
+*   Computation that is a good match for OSG
+*   Computation that is NOT a good match for OSG
 
 </div>
 
@@ -32,7 +32,7 @@ cores are varying at any given time.
 
 
 
-## Computation that is a good match for OSG Connect 
+## Computation that is a good match for OSG 
 
 High throughput workflows with simple system and data dependencies are a good 
 fit for OSG. Typically these workflows can be decomposed into multiple
@@ -58,7 +58,7 @@ guidelines:
     or read our Developing High-Throughput Applications guide.</li>
 <li>   Input and output data for each job should be < 10 GB to allow them to be 
     transferred in by the jobs, processed and returned to the submit node. Note 
-    that the OSG Connect Virtual Cluster does not have a global shared file 
+    that the OSG Virtual Cluster does not have a global shared file 
     system, so jobs with such dependencies will not work.</li>
 <li>   No shared filesystem. Jobs must transfer all executables, input data, and 
     output data. HTCondor can transfer the files for you, but you will have to 
