@@ -35,12 +35,12 @@ cores are varying at any given time.
 ## Computation that is a good match for OSG Connect 
 
 High throughput workflows with simple system and data dependencies are a good 
-fit for OSG Connect. Typically these workflows can be decomposed into multiple
+fit for OSG. Typically these workflows can be decomposed into multiple
 tasks that can be carried out independently.  Ideally, these tasks will download 
 data for input, run some computation on it and then return results (which may be 
 used by future tasks).
 
-Jobs submitted into the OSG Connect will be executed on machines at several 
+Jobs submitted into the OSG will be executed on machines at several 
 remote physical clusters. These machines may differ in terms of computing 
 environment from the submit node. Therefore it is important that the jobs are 
 as self-contained as possible by generic binaries and data that can be either 
@@ -65,24 +65,24 @@ guidelines:
     identify and list the files in your HTCondor job description file. </li>
 </ul>
 
-## Computation that is NOT a good match for OSG Connect 
+## Computation that is NOT a good match for OSG 
 
 The following are examples of computations that are NOT good matches for 
-OSG Connect:
+OSG:
 <ul>
 <li>   Tightly coupled computations, for example MPI based communication, will 
-    not work well on OSG Connect due to the distributed nature of the infrastructure.</li>
+    not work well on OSG due to the distributed nature of the infrastructure.</li>
 <li>   Computations requiring a shared file system will not work, as there is 
-    no shared filesystem between the different clusters on OSG Connect.</li>
+    no shared filesystem between the different clusters on the OSG.</li>
 <li>   Computations requiring complex software deployments or proprietary software 
     are not a good fit.  There is limited support for distributing software to 
     the compute clusters, but for complex software, or licensed software, 
     deployment can be a major task.</li>
 </ul>
 
-##How to get help using OSG Connect
+##How to get help using OSG
 
-Please contact user support staff at [connect-support@uchicago.edu](mailto:connect-support@uchicago.edu).
+Please contact user support staff at [user-support@opensciencegrid.org](mailto:user-support@opensciencegrid.org).
 
 
 <h2> Available Resources on OSG </h2> 
@@ -95,22 +95,20 @@ we load a variety of job templates that cover basic usage, specific use cases, a
 
 <h3> Software Applications </h3>
 
-Log in OSG with secure shell  
+We will be submitting jobs to the OSG through HCC's Crane login node.
+Log in to Crane (HCC machine) with secure shell  
 
 ~~~
-$ ssh username@login.osgconnect.net
+$ ssh username@crane.unl.edu
 ~~~
 
 
-The first step in using the module command is to initialize the module system.  This 
-step consists of sourcing a shell specific file that adds the module command 
-to your environment. For example, initializing module for bash is done as follows:
+The first step in using the module command is to initialize the OSG module system.  This 
+step consists of sourcing a file that switches from the built-in HCC module environment to the OSG module environment.  Source the file as follows:
 
 ~~~
-$ source /cvmfs/oasis.opensciencegrid.org/osg/modules/lmod/5.6.2/init/bash
+$ source osg_oasis_init
 ~~~
-
-For other shells such as sh, zsh, tcsh, csh, etc., you would replace bash with the shell name (e.g. zsh).
 
 
 Once the distributed environment modules system is initialized, you can check the 
