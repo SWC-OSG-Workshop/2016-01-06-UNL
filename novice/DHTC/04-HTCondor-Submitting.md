@@ -1,7 +1,7 @@
 ---
 layout: lesson
 root: ../..
-title: Job submission on OSG Connect
+title: Job submission on HCC OSG HTCondor Pool
 ---
 <div class="objectives" markdown="1">
 
@@ -12,87 +12,25 @@ title: Job submission on OSG Connect
 
 <h2>Overview</h2> In this section, we will learn the basics of HTCondor
 in submitting and monitoring workloads, or "jobs". The jobs are
-submitted through the login node of OSG Connect. The submitted jobs are
+submitted through the login node of Crane. The submitted jobs are
 executed on the remote worker node(s) and the outputs are transfered
 back to the login node. In the HTCondor job submit file, we have to
 describe how to execute the program and transfer the output data.
 
-<h2>Login to OSG Connect </h2>
+Note that even though we use the submit node of Crane, we are not
+going to use the default scheduler for Crane, and thus not use the
+rest of the cluster.
 
-First, we log in to OSG Connect:
+For more information, see the [HCC OSG HTCondor Documentation](https://hcc-docs.unl.edu/display/HCCDOC/HTCondor+on+the+OSG)
 
-~~~
-$ ssh username@ login.duke.ci-connect.net  # username is your username
-password:                                  # enter your password
-~~~
+<h2>Login to Crane</h2>
 
-Let's introduce a command that will be useful throughout your OSG Connect
-usage: `connect`.
-
-`Connect` is a single interface to tools that enhance or simplify your use
-of the OSG Connect platform.  We occasionally add components to this command
-to provide new capabilities, or to make common tasks easier.  Let's look at
-usage:
+First, we log in to Crane:
 
 ~~~
-$ connect
-usage: connect <subcommand> [args]
-       connect addsite user@hostname sched-type
-       connect cclog
-       connect debug
-       connect histogram [-l | --last] [user]
-       connect project
-       connect reset
-       connect setup
-       connect show-projects [-u username] [projectname]
-       connect status [-f | --full]
-       connect submit
-       connect watch [seconds [user]]
+$ ssh username@crane.unl.edu    # username is your username
+password:                       # enter your password
 ~~~
-
-Each of these subcommands has a specific role, and we'll explore some of them
-during this workshop.  Fow now, just take a look at two:
-
-~~~
-$ connect show-projects
-Based on your username (username), here is a list of projects you have
-access to:
-  * duke-SWC-Duke15
-~~~
-
-Each time you run a workload on OSG Connect, you need a project name to
-associate it.  For your research work later on, we can get you started
-with a permanent project, but for now you should find the duke-SWC-Duke15
-project available.  Some of you might also find the ConnectTrain project
-listed -- that is OK but not necessary.
-
-~~~
-$ connect project
-~~~
-
-If you're a heavy user of OSG Connect, you may end up with multiple projects.
-`connect project` is a way both to see your available projects, and to
-change which project is used for your job submission.  Your choice here is
-saved, so whatever project you selected most recently is used for all future
-workloads, until you change it again.
-
-> #### A little more about projects ####
->
-> Every user should start out with a reasonable project -- it's not
-> necessary to change your project to get started computing.  Once you're
-> ready to begin research on OSG, there are two routes: join an existing
-> project, or create a new one.
-> <br/>
-> To join a current project, take a look at the
-> [current projects list](http://osgconnect.net/project-summary).  If your
-> research is represented by one of these existing projects, click
-> its name to open a request to join it.
-> <br/>
-> Otherwise, you can create a new project.  Begin with the [new project
-> documentation](https://confluence.grid.iu.edu/display/CON/Start+a+Projec
-> t+with+OSG+Connect) - you may wish to sign on your advisor as a
-> principal investigator.
-
 
 We will get our example files for all today's lessons using `tutorial`.
 
@@ -149,18 +87,13 @@ $ ./short.sh
 ~~~
 
 ~~~
-Start time: Wed Aug 21 09:21:35 CDT 2013
-
-Job is running on node: login.duke.ci-connect.net
-
-Job running as user: uid=54161(username) gid=1000(users) groups=1000(users),0(root),1001(osg-connect),1002(osg-staff),1003(osg-connect-test),9948(staff),19012(osgconnect)
-
-Job is running in directory: /home/username/tutorial-quickstart
+Start time: Tue Dec 22 13:15:20 CST 2015
+Job is running on node: login.crane.hcc.unl.edu
+Job running as user: uid=1838(rynge) gid=11156(bockelman) groups=11156(bockelman)
+Job is running in directory: /home/bockelman/rynge/tutorial-quickstart
 
 Working hard...
-
 Science complete!
-
 ~~~
 
 ##Job submission file##
@@ -213,7 +146,7 @@ jobs by adding your own username to the command.
 
 ~~~
 $ condor_q username
--- Submitter: login.duke.ci-connect.net : <128.135.158.173:43606> : login.duke.ci-connect.net
+-- Submitter: crane.unl.edu : <128.135.158.173:43606> : crane.unl.edu
  ID      OWNER            SUBMITTED     RUN_TIME ST PRI SIZE CMD
  823.0   username           8/21 09:46   0+00:00:06 R  0   0.0  short.sh
 1 jobs; 0 completed, 0 removed, 0 idle, 1 running, 0 held, 0 suspended
@@ -225,7 +158,7 @@ cluster -- the number that `condor_submit` gave you.
 
 ~~~
 $ condor_q 823
--- Submitter: login.duke.ci-connect.net : <128.135.158.173:43606> : login.duke.ci-connect.net
+-- Submitter: crane.unl.edu : <128.135.158.173:43606> : crane.unl.edu
  ID      OWNER            SUBMITTED     RUN_TIME ST PRI SIZE CMD
  823.0   username           8/21 09:46   0+00:00:10 R  0   0.0  short.sh
 1 jobs; 0 completed, 0 removed, 0 idle, 1 running, 0 held, 0 suspended
@@ -246,8 +179,8 @@ not appear in condor_q.
 You may sometimes see jobs in **H** state.  These are _held_ jobs. Held
 jobs are stalled, usually for a specific reason, and won't progress until
 released.  Until you gain savvy with diagnosing why a job is held and
-solving it on your own, you may contact the OSG Connect support team
-for help with held jobs.
+solving it on your own, you may contact the HCC support team for help
+with held jobs.
 
 Let's wait for your job to finish – that is, for condor_q not to show
 the job in its output.
@@ -258,19 +191,19 @@ $ condor_q username | tail -1
 ~~~
 
 You could run this over and over to watch for the job to complete -- but
-`connect watch` can make this simpler.  Let's submit the job again, and
-watch condor_q output at five-second intervals (the default). Your first
+`watch` can make this simpler.  Let's submit the job again, and
+watch condor_q output at five-second intervals. Your first
 job has probably already completed by now, so submit a new one first:
 
 ~~~
 $ condor_submit tutorial01.submit
 Submitting job(s).
 1 job(s) submitted to cluster 823
-$ connect watch
+$ watch -n 5 condor_q
 ~~~
 
 When your job has completed, it will disappear from the list.  To close
-`connect watch`, press control-C -- hold down Control and press C.
+`watch`, press control-C -- hold down Control and press C.
 
 ##Job history##
 Once your job has finished, you can get information about its execution
@@ -300,7 +233,6 @@ Read the output file. It should be something like this:
 
 ~~~
 $ cat job.output
-19 Feb 15:11:43| connect_wrapper  | 
 Start time: Thu Feb 19 15:11:43 EST 2015
 Job is running on node: VPA-WH505-01-S4-its-u12-nfs-20141003
 Job running as user: uid=1066(osgconnect) gid=502(condoruser) groups=502(condoruser),108(fuse)
@@ -334,6 +266,80 @@ Submitting job(s).
 $ condor_rm 829.0
 Job 829.0 has been marked for removal.
 ~~~
+
+## Job Requirements - A Basic OSG Job ##
+
+HTCondor job and machines are represented as HTCondor classads. These are sets
+of key/value attribute pairs. Let's examine a what a machine classad looks like.
+This is a two step process, first we get a name for one of the machines, and then
+we ask condor_status to give us the details for that machine (-long).
+
+~~~
+$ condor_status -pool glidein.unl.edu -af Name | head -n 1
+[resource name]
+$ condor_status -long -pool glidein.unl.edu [resource name] | sort
+HAS_FILE_usr_lib64_libgfortran_so_3 = true
+HAS_MODULES = false
+OSGVO_OS_STRING = "RHEL 6"
+~~~
+
+You can make use any of these attributes to limit where your jobs go. The following
+is a fairly complete OSG job which you can use when getting started on OSG. Note
+the `Requirements` and `requests_*` lines.
+
+~~~
+# The UNIVERSE defines an execution environment. You will almost always use VANILLA.
+Universe = vanilla
+
+# These are good base requirements for your jobs on OSG. It is specific on OS and
+# OS version, core cound and memory, and wants to use the software modules. 
+Requirements = OSGVO_OS_STRING == "RHEL 6" && HAS_MODULES == True
+request_cpus = 1
+request_memory = 1 GB
+
+# EXECUTABLE is the program your job will run It's often useful
+# to create a shell script to "wrap" your actual work.
+Executable = short.sh
+
+# ERROR and OUTPUT are the error and output channels from your job
+# that HTCondor returns from the remote host.
+Error = job.$(Cluster).$(Process).error
+Output = job.$(Cluster).$(Process).output
+
+# The LOG file is where HTCondor places information about your
+# job's status, success, and resource consumption.
+Log = job.log
+
+# Send the job to Held state on failure. 
+on_exit_hold = (ExitBySignal == True) || (ExitCode != 0)  
+
+# Periodically retry the jobs every 60 seconds, up to a maximum of 5 retries.
+periodic_release =  (NumJobStarts < 5) && ((CurrentTime - EnteredCurrentStatus) > 60)
+
+# QUEUE is the "start button" - it launches any jobs that have been
+# specified thus far.
+Queue 1
+
+~~~
+
+You can test this job by submitting and monitoring it as we have just covered:
+
+
+~~~
+$ condor_submit osg-template-job.submit
+Submitting job(s).
+1 job(s) submitted to cluster 830
+~~~
+
+The filenames for this job includes a job id, which means that if you submit more
+than one job, they will all have unique outputs.
+
+~~~
+$ ls *.output
+job.830.0.output
+job.831.0.output
+~~~
+
 
 <div class="keypoints" markdown="1">
 
