@@ -29,6 +29,7 @@ simple examples. The examples are based on R and MATLAB Runtime. Once we underst
 the basic HTCondor script, it is easy to scale up.
 
 ~~~
+$ source osg_oasis_init
 $ tutorial ScalingUp-R
 $ cd tutorial-ScalingUp-R
 ~~~
@@ -43,20 +44,43 @@ job. An easy way to do this is to add the $(Cluster) and $(Process)
 macros to the HTCondor submit file. 
 
 ~~~
-universe = vanilla
+# The UNIVERSE defines an execution environment. You will almost always use VANILLA.
+Universe = vanilla
 
-Executable = R-wrapper.sh
+# These are good base requirements for your jobs on OSG. It is specific on OS and
+# OS version, core cound and memory, and wants to use the software modules. 
+Requirements = OSGVO_OS_STRING == "RHEL 6" && HAS_MODULES == True
+request_cpus = 1
+request_memory = 1 GB
+
+# executable is the program your job will run It's often useful
+# to create a shell script to "wrap" your actual work.
+executable = R-wrapper.sh
 arguments = mcpi.R $(Process)
-transfer_input_files = mcpi.R     # mcpi.R is the R program we want to run
 
-output = Log/job.out.$(Cluster).$(Process)  
+# files transferred into the job sandbox
+transfer_input_files = mcpi.R
+
+# error and output are the error and output channels from your job
+# that HTCondor returns from the remote host.
+output = Log/job.out.$(Cluster).$(Process)
 error = Log/job.error.$(Cluster).$(Process)
+
+# The log file is where HTCondor places information about your
+# job's status, success, and resource consumption.
 log = Log/job.log.$(Cluster).$(Process)
 
-requirements = (HAS_CVMFS_oasis_opensciencegrid_org =?= TRUE)   # Checks if OASIS available
-queue 100
+# Send the job to Held state on failure. 
+on_exit_hold = (ExitBySignal == True) || (ExitCode != 0)  
 
+# Periodically retry the jobs every 60 seconds, up to a maximum of 5 retries.
+periodic_release =  (NumJobStarts < 5) && ((CurrentTime - EnteredCurrentStatus) > 60)
+
+# Queue is the "start button" - it launches any jobs that have been
+# specified thus far.
+queue 100
 ~~~
+
 Note the `Queue 100`.  This tells Condor to enqueue 100 copies of this job
 as one cluster.  
 
@@ -69,10 +93,11 @@ module load R
 Rscript $1 > mcpi.$2.out
 ~~~
 
-The wrapper loads the R module and then executes the script with Rscript utility. From the submit 
-file described above, the first argument is the name of the R program - mcpi.R and the second argument is the process number. The process number is a sequence of integers and used here to name the output
-files. 
-
+The wrapper loads the R module and then executes the script with Rscript
+utility. From the submit file described above, the first argument is the
+name of the R program - mcpi.R and the second argument is the process
+number. The process number is a sequence of integers and used here to
+name the output files.
 
 You'll see something like the following upon submission:
 
@@ -82,73 +107,10 @@ Submitting job(s).........................
 100 job(s) submitted to cluster 837.
 ~~~
 
-Apply your `condor_q` and `connect watch` knowledge to see this job
+Apply your `condor_q` knowledge to see this job
 progress. Execute the following bash script to compute the average from all the jobs.
 
 Once the jobs are completed, you might want to invoke the script 
-
-~~~
-$ ./mcpi_ave.bash
-~~~
-
-to compute the average value of pi from all the available outputs.  
-
-## Interlude: utilization plots
-
-Before we continue, let's look at a URL: [your Duke CI Connect home
-page](https://duke.ci-connect.net/).  If you have not signed in, you'll be
-redirected back to the main site.  Sign In as you did the first time you
-signed up, and then click again on the
-[your Duke CI Connect home link](https://duke.ci-connect.net/home).
-
-You see a number of graphs and plots here showing things happening
-in OSG Connect.  We'll go over these briefly, then return later.
-
-## Connect Histogram 
-
-We're waiting on 100 jobs.  Let's use `connect watch` to
-watch for job completions.  As soon as you see some jobs enter R state
-(running), press control-C, and let's introduce a new command:
-
-~~~
-$ connect histogram
-Val                               |Ct (Pct)    Histogram
-unl.edu                           |46 (68.66%) ████████████████████████████████▏
-bu.edu                            |13 (19.40%) █████████▏
-uconn.edu                         |2 (2.99%)   █▌
-CRUSH-OSG-10-5-220-34             |1 (1.49%)   ▊
-ufhpc                             |1 (1.49%)   ▊
-LAW-D-SBA01-S2-its-c6-osg-20141013|1 (1.49%)   ▊
-CRUSH-OSG-10-5-10-33              |1 (1.49%)   ▊
-iu.edu                            |1 (1.49%)   ▊
-vt.edu                            |1 (1.49%)   ▊
-~~~
-
-This command gives us a simple histogram of where on the grid our jobs
-are running.  The column on the left is (for the most) a list of _sites_
-that OSG jobs run on.  At times we don't correctly group job locations
-together. For example, the two rows for CRUSH-* above are really the
-same site, but histogram doesn't know about that site (yet) so it
-displays as two.  But most of the big sites are mapped correctly.  You
-see that in my case, 67 of my 100 jobs have begun running, and among
-them 69% (46 of 67) are running at University of Nebraska at Lincoln.
-
-`connect histogram` gives metrics on current jobs.  As jobs complete,
-they no longer appear.  How to see where jobs have already run? `connect
-histogram --last` shows the run sites of your *last* job cluster.
-
-~~~
-$ connect histogram --last
-Val                               |Ct (Pct)    Histogram
-uc3                               |49 (49.00%) ████████████████████████████████▏
-bu.edu                            |21 (21.00%) █████████████▊
-uconn.edu                         |11 (11.00%) ███████▎
-unl.edu                           |9 (9.00%)   ██████
-mwt2.org                          |3 (3.00%)   ██
-c5a-s22.ufhpc                     |3 (3.00%)   ██
-LCS-215-021-S2-its-c6-osg-20141013|3 (3.00%)   ██
-cinvestav.mx                      |1 (1.00%)   ▊
-~~~
 
 ## Post process 
 
@@ -182,7 +144,7 @@ Fig.1. Two dimensional Rosenbrock function along x-y plane.⋅⋅
 
 It is easiest to start with the `tutorial` command. In the command prompt, type
 
-    $ tutorial tutorial-matlab-SimulatedAnnealing # Copies input and script files to the directory tutorial-matlab-SimulatedAnnealing.
+    $ tutorial tutorial-matlab-SimulatedAnnealing
 
 This will create a directory `tutorial-matlab-SimulatedAnnealing`. Inside the directory, you will see the following files
 
@@ -229,7 +191,7 @@ In the above script, the optimizatoin is repeated for five times with random int
 
 ## MATLAB runtime execution
 We need to compile the matlab script on a machine with license. At present, we don't have license 
-for matlab on OSG-Conect. On a⋅machine with matlab license, invoke the compiler `mcc`. It is 
+for matlab on OSG. On a⋅machine with matlab license, invoke the compiler `mcc`. It is 
 important to turn off all⋅ graphical options (-nodisplay), disable Java (-nojvm), and instruct MATLAB to run this⋅
 program as a single-threaded application (-singleCompThread). The flag -m means `c` language 
 translation during compilation.  
@@ -237,7 +199,7 @@ translation during compilation.
     mcc -m -R -singleCompThread -R -nodisplay -R -nojvm SA_Opt.m
 
 would produce the files: `SA_Opt, run_SA_Opt.sh, mccExcludedFiles.log and readme.txt`.  The file `SA_Opt`⋅
-is the compiled binary file that we would like to run on OSG Connect.⋅
+is the compiled binary file that we would like to run on OSG.⋅
 
 Check  further details of compilation process in the [lesson on basics of MATLAB compilation] (https://support.opensciencegrid.org/support/solutions/articles/5000660751-basics-of-compiled-matlab-applications-hello-world-example), we need to compile the matlab script on a machine with license.
 
@@ -306,6 +268,4 @@ For assistance or questions, please email the OSG User Support team  at [user-su
 *    Changing the value of *Queue* allows the user to scale up the resources.
 *    *Arguments* allows you to pass parameters to a job script.
 *    $(Cluster) and $(Process) can be used to name log files uniquely.
-*    `connect histogram` gives a nice plot of resource assignments.
-*    Your Duke CI Connect home page gives other useful plots.
 </div>
