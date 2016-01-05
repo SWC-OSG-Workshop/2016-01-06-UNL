@@ -502,7 +502,8 @@ What does the command `cd` without a directory name do?
 3.  It changes the working directory to the user's home directory.
 4.  It produces an error message.
 </div>
-
+<!---
 <div class="challenge" markdown="1">
 What does the command `ls` do when used with the -s and -h arguments?
 </div>
+-->
