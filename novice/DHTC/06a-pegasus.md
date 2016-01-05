@@ -73,6 +73,7 @@ However, for simple workflows, the transformation and replica catalog can be con
 The necessary files are available to the user by invoking the tutorial command.
 
 ~~~
+$ module load pegasus/4.6.0dev
 $ tutorial pegasus
 $ cd tutorial-pegasus/wordfreq-workflow
 ~~~
