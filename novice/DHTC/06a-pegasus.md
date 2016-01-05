@@ -154,32 +154,155 @@ time we plan/submit a workflow, but in this case we have a workflow
 which is used by different users, so changing the paths to scratch and
 output filesystems on the fly makes the workflow easier to share.
 
+<h2>Submitting</h2> 
+
+A new workflow can be submitted using the provided `submit` script:
+
+~~~
+$ ./submit
+2016.01.05 13:19:02.128 CST:    
+2016.01.05 13:19:02.133 CST:   ----------------------------------------------------------------------- 
+2016.01.05 13:19:02.139 CST:   File for submitting this DAG to Condor           : wordfreq-workflow-0.dag.condor.sub 
+2016.01.05 13:19:02.144 CST:   Log of DAGMan debugging messages                 : wordfreq-workflow-0.dag.dagman.out 
+2016.01.05 13:19:02.149 CST:   Log of Condor library output                     : wordfreq-workflow-0.dag.lib.out 
+2016.01.05 13:19:02.155 CST:   Log of Condor library error messages             : wordfreq-workflow-0.dag.lib.err 
+2016.01.05 13:19:02.160 CST:   Log of the life of condor_dagman itself          : wordfreq-workflow-0.dag.dagman.log 
+2016.01.05 13:19:02.165 CST:    
+2016.01.05 13:19:02.181 CST:   ----------------------------------------------------------------------- 
+2016.01.05 13:19:03.458 CST:   Your database is compatible with Pegasus version: 4.6.0 
+2016.01.05 13:19:03.588 CST:   Submitting to condor wordfreq-workflow-0.dag.condor.sub 
+2016.01.05 13:19:03.755 CST:   Submitting job(s). 
+2016.01.05 13:19:03.761 CST:   1 job(s) submitted to cluster 76355. 
+2016.01.05 13:19:03.766 CST:    
+2016.01.05 13:19:03.771 CST:   Your workflow has been started and is running in the base directory: 
+2016.01.05 13:19:03.776 CST:    
+2016.01.05 13:19:03.782 CST:     /work/bockelman/rynge/workflows/runs/1452021527 
+2016.01.05 13:19:03.787 CST:    
+2016.01.05 13:19:03.792 CST:   *** To monitor the workflow you can run *** 
+2016.01.05 13:19:03.797 CST:    
+2016.01.05 13:19:03.802 CST:     pegasus-status -l /work/bockelman/rynge/workflows/runs/1452021527 
+2016.01.05 13:19:03.808 CST:    
+2016.01.05 13:19:03.813 CST:   *** To remove your workflow run *** 
+2016.01.05 13:19:03.818 CST:    
+2016.01.05 13:19:03.823 CST:     pegasus-remove /work/bockelman/rynge/workflows/runs/1452021527 
+2016.01.05 13:19:03.829 CST:    
+2016.01.05 13:19:04.012 CST:   Time taken to execute is 15.74 seconds
+~~~
+
+Note that Pegasus uses a directory as the handle to a workflow. Whereas a job id is only valid while the
+job is in the queue, a directory is a a valid handle before, during and after workflow execution.
+
+<h2>Monitoring / Debugging</h2> 
+
+Use the directory provided in the output of the previous command to check on the status of your workflow:
+
+~~~
+$ pegasus-status [wfdir]
+STAT  IN_STATE  JOB                                                                           
+Run      00:53  wordfreq-workflow-0
+Idle     00:08   ┣━wordfreq_ID0000001                                                         
+Idle     00:08   ┣━wordfreq_ID0000005                                                         
+Idle     00:03   ┣━wordfreq_ID0000003                                                         
+Idle     00:02   ┣━wordfreq_ID0000002                                                         
+Idle     00:02   ┣━wordfreq_ID0000006                                                         
+Idle     00:02   ┗━wordfreq_ID0000004                                                         
+Summary: 7 Condor jobs total (I:6 R:1)
+
+UNRDY READY   PRE  IN_Q  POST  DONE  FAIL %DONE STATE   DAGNAME                                 
+    7     0     0     6     0     4     0  23.5 Running *wordfreq-workflow-0.dag                
+Summary: 1 DAG total (Running:1)
+~~~
+
+While not covered in this tutorial, if the workflow fails, `pegasus-analyzer` can be run to get a summary of what failed. This is usually more helpful than trying to look at logs and outputs of tasks.
+
+<h2>Statistics</h2> 
+
+Once the workflow has completed (see the output of `pegasus-status`), you can find runtime statistics
+using the `pegasus-statistics` command. Again, use the submit time provided directory as argument:
+
+~~~
+$ pegasus-statistics [wfdir]
+
+#
+# Pegasus Workflow Management System - http://pegasus.isi.edu
+#
+# Workflow summary:
+#   Summary of the workflow execution. It shows total
+#   tasks/jobs/sub workflows run, how many succeeded/failed etc.
+#   In case of hierarchical workflow the calculation shows the
+#   statistics across all the sub workflows.It shows the following
+#   statistics about tasks, jobs and sub workflows.
+#     * Succeeded - total count of succeeded tasks/jobs/sub workflows.
+#     * Failed - total count of failed tasks/jobs/sub workflows.
+#     * Incomplete - total count of tasks/jobs/sub workflows that are
+#       not in succeeded or failed state. This includes all the jobs
+#       that are not submitted, submitted but not completed etc. This
+#       is calculated as  difference between 'total' count and sum of
+#       'succeeded' and 'failed' count.
+#     * Total - total count of tasks/jobs/sub workflows.
+#     * Retries - total retry count of tasks/jobs/sub workflows.
+#     * Total+Retries - total count of tasks/jobs/sub workflows executed
+#       during workflow run. This is the cumulative of retries,
+#       succeeded and failed count.
+# Workflow wall time:
+#   The wall time from the start of the workflow execution to the end as
+#   reported by the DAGMAN.In case of rescue dag the value is the
+#   cumulative of all retries.
+# Workflow cumulative job wall time:
+#   The sum of the wall time of all jobs as reported by kickstart.
+#   In case of job retries the value is the cumulative of all retries.
+#   For workflows having sub workflow jobs (i.e SUBDAG and SUBDAX jobs),
+#   the wall time value includes jobs from the sub workflows as well.
+# Cumulative job wall time as seen from submit side:
+#   The sum of the wall time of all jobs as reported by DAGMan.
+#   This is similar to the regular cumulative job wall time, but includes
+#   job management overhead and delays. In case of job retries the value
+#   is the cumulative of all retries. For workflows having sub workflow
+#   jobs (i.e SUBDAG and SUBDAX jobs), the wall time value includes jobs
+#   from the sub workflows as well.
+# Workflow cumulative job badput wall time:
+#   The sum of the wall time of all failed jobs as reported by kickstart.
+#   In case of job retries the value is the cumulative of all retries.
+#   For workflows having sub workflow jobs (i.e SUBDAG and SUBDAX jobs),
+#   the wall time value includes jobs from the sub workflows as well.
+# Cumulative job badput wall time as seen from submit side:
+#   The sum of the wall time of all failed jobs as reported by DAGMan.
+#   This is similar to the regular cumulative job badput wall time, but includes
+#   job management overhead and delays. In case of job retries the value
+#   is the cumulative of all retries. For workflows having sub workflow
+#   jobs (i.e SUBDAG and SUBDAX jobs), the wall time value includes jobs
+#   from the sub workflows as well.
+------------------------------------------------------------------------------
+Type           Succeeded Failed  Incomplete  Total     Retries   Total+Retries
+Tasks          6         0       0           6         0         6            
+Jobs           17        0       0           17        0         17           
+Sub-Workflows  0         0       0           0         0         0            
+------------------------------------------------------------------------------
+
+Workflow wall time                                       : 2 mins, 23 secs
+Workflow cumulative job wall time                        : 48 secs
+Cumulative job wall time as seen from submit side        : 1 min, 13 secs
+Workflow cumulative job badput wall time                 : 
+Cumulative job badput wall time as seen from submit side : 
+~~~
+
+
+> ### On your own
+> * Start a new workflow with a larger input data set. Copy all the files in the `many-more-inputs` directory to the `inputs` directory, and run `./submit`. Check the status with `pegasus-status`
+> * A nice feature is that failed/stopped workflows can be recovered from where they left of. While
+the workflow is running, use `pegasus-remove [dir]` to stop the workflow. Wait for the jobs to leave the queue, and then use `pegasus-run [dir]` to start the workflow up again.
+
 <div class="keypoints" markdown="1">
 
 #### Keypoints
-*   Pegasus requires dax.xml, sites.xml and pegasusrc files. These files contain the information about executable, input and output files and the relation between them while executing the jobs.
+*   Pegasus requires dax.xml, sites.xml and pegasus.conf files. These files contain the information about executable, input and output files and the relation between them while executing the jobs.
 
 *   It is convenient to generate the xml files via scripts. In our example, dax.xml is generated via python script and sites.xml is generated via bash script.
 
-*   To implement a new workflow, edit the existing dax-generator, sites-generator and  submit scripts.  In the above examples, we modified the workflow for the single NAMD job to implement the workflows of N-sequential and M-parallel, N-sequential jobs.
+*   To implement a new workflow, edit the existing dax-generator, sites-generator and  submit scripts.
  
 </div>
-
-
  
-<div class="keypoints" markdown="1">
-
-#### References
-
-*   [Pegasus Documentation Pegasus documentation page](https://pegasus.isi.edu/wms/docs/latest/)
-
-*   [OSG QuickStart. Getting started with the Open Science Grid (OSG)](https://confluence.grid.iu.edu/display/CON/Home)
-
-*   [HTCondor Manual. Manual for the High Throughput Condor software to schedules the jobs on OSG](http://research.cs.wisc.edu/htcondor/manual/v8.2/2_Users_Manual.html)
-
-
-*For further assistance or questions, please email connect-support@opensciencegrid.org.
-</div>
 
 
 
