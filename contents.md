@@ -20,12 +20,16 @@ title: Lessons
 
 ## Unit II: [Version Control with Git ](novice/git/index.html)
 
-1.  [Introducing Version Control](novice/git/00-intro.html)
-2.  [A Better Kind of Backup](novice/git/01-backup.html)
-3.  [Collaborating](novice/git/02-collab.html)
-4.  [Conflicts](novice/git/03-conflict.html)
-5.  [Hosting Science](novice/git/04-open.html)
-6.  [Reference...](novice/ref/02-git.html)
+1.  [Automated Version Control](https://eharstad.github.io/git-novice/01-basics.html)
+2.  [Setting Up Git](https://eharstad.github.io/git-novice/02-setup.html)
+3.  [Creating a Repository](https://eharstad.github.io/git-novice/03-create.html)
+4.  [Tracking Changes](https://eharstad.github.io/git-novice/04-changes.html)
+5.  [Exploring History](https://eharstad.github.io/git-novice/05-history.html)
+6.  [Ignoring Things](https://eharstad.github.io/git-novice/06-ignore.html)
+7.  [Remotes in GitHub](https://eharstad.github.io/git-novice/07-github.html)
+8.  [Collaborating](https://eharstad.github.io/git-novice/08-collab.html)
+9.  [Conflicts](https://eharstad.github.io/git-novice/09-conflict.html)
+10.  [Reference...](novice/ref/02-git.html)
 
 ## Unit III: [Programming with Python ](novice/python/index.html)
 
