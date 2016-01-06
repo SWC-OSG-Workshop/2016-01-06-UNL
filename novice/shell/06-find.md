@@ -443,7 +443,7 @@ about them."
 *   `man command` displays the manual page for a given command.
 
 </div>
-
+<!---
 <div class="challenge" markdown="1">
 Write a short explanatory comment for the following shell script:
 
@@ -452,6 +452,35 @@ Write a short explanatory comment for the following shell script:
 find . -name '*.dat' -print | wc -l | sort -n
 ~~~
 </div>
+</div>
+-->
+
+<div class="challenge" markdown="1">
+~~~
+The Tao that is seen
+Is not the true Tao, until
+You bring fresh toner.
+
+With searching comes loss
+and the presence of absence:
+"My Thesis" not found.
+
+Yesterday it worked
+Today it is not working
+Software is like that.
+~~~
+
+From the above text, contained in the file `haiku.txt`, which command would result in the
+following output:
+
+~~~
+and the presence of absence:
+~~~
+
+1. `grep of haiku.txt`
+2. `grep -E of haiku.txt`
+3. `grep -w of haiku.txt`
+4. `grep -i of haiku.txt`
 </div>
 
 <div class="challenge" markdown="1">
