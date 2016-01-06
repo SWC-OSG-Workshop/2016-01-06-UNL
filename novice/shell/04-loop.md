@@ -470,7 +470,7 @@ do
 done
 ~~~
 </div>
-
+<!---
 <div class="challenge" markdown="1">
 Describe in words what the following loop does.
 
@@ -481,3 +481,4 @@ do
 done
 ~~~
 </div>
+-->
