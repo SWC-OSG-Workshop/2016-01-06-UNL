@@ -57,10 +57,12 @@ fashion:  *A0-->A1-->A2-->A3*. These set of jobs clearly represents an
 acyclic graph. In DAGMan language, job *A0* is parent of job *A1*,  job *A1* is 
 parent of *A2* and job *A3* is parent of *A4*. 
 
-The DAGMan script and the necessary files are available to the user 
-by invoking the *tutorial* command. 
+First login and get the DAGMan script and the necessary files by invoking the 
+*tutorial* command. 
 
 ~~~
+$ ssh username@crane.unl.edu
+$ source osg_oasis_init
 $ tutorial dagman-namd
 $ cd tutorial-dagman-namd
 ~~~
@@ -72,7 +74,7 @@ HTCondor script files that execute the files `namd_run_job0.sh,...`.
 Let us take a look at the DAG file `linear.dag`.  
 
 ~~~
-$ nano linear.dag #open the linear.dag file
+$ nano linear.dag
 
 ######DAG file######    #comment
 Job A0 namd_run_job0.submit  #Job keyword, Job Name, Condor Job submission script.
@@ -114,12 +116,14 @@ Let's monitor the job status every two seconds.  (Recall `connect watch`
 from a previous lesson.)
 
 ~~~
-$ watch -n 1 condor_q username
+$ watch -n 1 condor_q -dag username
 
--- Submitter: crane.unl.edu : <192.170.227.195:48781> : crane.unl.edu
- ID      OWNER            SUBMITTED     RUN_TIME ST PRI SIZE CMD               
-1317646.0   username          10/30 17:27   0+00:00:28 R  0   0.3  condor_dagman     
-1317647.0   username          10/30 17:28   0+00:00:00 I  0   0.0  namd_run_job0.sh  
+
+-- Submitter: login.crane.hcc.unl.edu : <129.93.227.113:9619?noUDP&sock=205992_4558_3> : login.crane.hcc.unl.edu
+ ID      OWNER/NODENAME   SUBMITTED     RUN_TIME ST PRI SIZE CMD
+126476.0   username        1/7  10:01   0+00:00:20 R  0   0.3  condor_dagman -f -
+126477.0    |-A0           1/7  10:01   0+00:00:00 I  0   0.0  namd_run_job0.sh
+
 
 2 jobs; 0 completed, 0 removed, 1 idle, 1 running, 0 held, 0 suspended
 ~~~~
@@ -129,6 +133,11 @@ execution `namd_run_job0.sh`. Once the dag completes, you will see four .tar.gz
 files `OutFilesFromNAMD_job0.tar.gz, OutFilesFromNAMD_job1.tar.gz, OutFilesFromNAMD_job2.tar.gz, 
 OutFilesFromNAMD_job3.tar.gz`. If the output files are not empty, the jobs are 
 successfully completed. Of course, a through check up requires looking at the output results.  
+
+Just one thing to note here, we used the `-dag` option with condor_q.  This is a special option that tells HTCondor to
+do a bit more processing and to present jobs grouped by the DAG that is running them.  It doesn't help much in our
+linear DAG example but with more complex DAGs, it makes it easier to see what jobs are associated with
+a given DAG and how much of the DAG has been completed.
 
 ###Parallel DAG###
 <div>
