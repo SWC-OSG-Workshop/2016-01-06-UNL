@@ -222,6 +222,8 @@ Summary: 1 DAG total (Running:1)
 
 While not covered in this tutorial, if the workflow fails, `pegasus-analyzer` can be run to get a summary of what failed. This is usually more helpful than trying to look at logs and outputs of tasks.
 
+Once the workflow is done, you can find outputs under `$WORK/workflows/outputs/`
+
 <h2>Statistics</h2> 
 
 Once the workflow has completed (see the output of `pegasus-status`), you can find runtime statistics
