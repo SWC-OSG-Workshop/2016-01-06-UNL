@@ -7,7 +7,6 @@ title: Data storage and transfer
 
 #### Objectives
 *   Discover how to transfer input and output data  
-*   Learn the what, why, how, and whens of using Stash
 </div>
 
 
@@ -120,13 +119,13 @@ $ mkdir my_directory
 
 <h2>Transferring files to and from Crane using SCP </h2> 
 
-We can transfer files to Stash using `scp`. First, let's 
+We can transfer files to Crane using `scp`. First, let's 
 look at transferring files using `scp`.  `Scp` is a counterpart to ssh that allows for
 secure, encrypted file transfers between systems using your ssh credentials.    
 
 To transfer a file from Crane using `scp`, you'll need to run `scp` with the
 source and destination.  Files on remote systems are indicated using
-user@machine:/path/to/file .  Let's copy the file we just created from Stash to
+user@machine:/path/to/file .  Let's copy the file we just created from Crane to
 our local system:
 
 ~~~
@@ -143,7 +142,7 @@ $ scp -r username@crane.unl.edu:~/transfer/my_directory .
 
 > #### Challenges
 >
-> * Create a directory with a file called `hello_world_2` in the `~/transfer` directory and copy it from Stash to your local system.
+> * Create a directory with a file called `hello_world_2` in the `~/transfer` directory and copy it from Crane to your local system.
 > * Create a directory called `hello_world_3` on your local system and copy it to the `transfer` directory.
 
 <h2>Transferring files to and from Crane using Globus</h2>
@@ -192,8 +191,6 @@ laptop by selecting it in the Crane window and selecting the left arrow.
 <div class="keypoints" markdown="1">
 
 #### Key Points
-* Stash is located at ~/stash and ~/public on login.duke.ci-connect.net.
-* Data can be transferred in and out of Stash using scp, Globus, and HTTP 
-* Data on Stash can be accessed by jobs running on compute nodes. 
+* Data can be transferred in and out of Crane using scp and Globus
 </div>
 
