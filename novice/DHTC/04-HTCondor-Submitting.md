@@ -45,6 +45,7 @@ We will get our example files for all today's lessons using `tutorial`.
 Let's get started with the *quickstart* tutorial:
 
 ~~~
+$ cd $WORK
 $ tutorial quickstart       # creates a directory "tutorial-quickstart"
 $ cd tutorial-quickstart    # script and input files are inside this directory
 ~~~

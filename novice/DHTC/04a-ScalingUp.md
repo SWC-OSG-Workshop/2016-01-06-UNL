@@ -30,6 +30,7 @@ the basic HTCondor script, it is easy to scale up.
 
 ~~~
 $ source osg_oasis_init
+$ cd $WORK
 $ tutorial ScalingUp-R
 $ cd tutorial-ScalingUp-R
 ~~~

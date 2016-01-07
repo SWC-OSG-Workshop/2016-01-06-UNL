@@ -6,7 +6,7 @@ title: Large Scale Computation with Pegasus
 <div class="objectives" markdown="1">
 
 #### Objectives
-*   Learn how to use pegasus to complete a set of computational tasks. 
+*   Learn how to use [Pegasus](https://pegasus.isi.edu) to complete a set of computational tasks. 
 </div>
 
 <h2> Overview </h2> 
@@ -67,13 +67,20 @@ Pegasus workflows have 4 components:
 
 However, for simple workflows, the transformation and replica catalog can be contained inside the DAX, and to further simplify the setup, the following examples generate the site catalog on the fly. This means that the user really only has to be concerned about creating the DAX. For details, please refer to the [Pegasus documentation](http://pegasus.isi.edu/wms/docs/latest/)
 
+The DAX and the catalogs are used as inputs to the Pegasus planning process. This takes the abstract workflow, and plans it into an executable workflow. The following picture illustrates how a two node abstract workflow could be planned for a particular execution environment:
+
+<div>
+   <img alt="pegasus-dax-dag" src="{{page.root}}/novice/DHTC/PegasusImages/mapping.jpg">
+</div>
 
 <h2>wordfreq example</h2> 
 
 The necessary files are available to the user by invoking the tutorial command.
 
 ~~~
+$ source osg_oasis_init
 $ module load pegasus/4.6.0dev
+$ cd $WORK
 $ tutorial pegasus
 $ cd tutorial-pegasus/wordfreq-workflow
 ~~~
@@ -284,6 +291,13 @@ Workflow cumulative job wall time                        : 48 secs
 Cumulative job wall time as seen from submit side        : 1 min, 13 secs
 Workflow cumulative job badput wall time                 : 
 Cumulative job badput wall time as seen from submit side : 
+~~~
+
+For real life computations, we expect the cumulative job wall time to be much greater thatn the workflow wall time. For example:
+
+~~~
+Workflow wall time                                       : 18 hours, 32 mins
+Workflow cumulative job wall time                        : 346 years, 23 days
 ~~~
 
 
