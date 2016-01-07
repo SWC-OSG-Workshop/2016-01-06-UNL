@@ -207,7 +207,7 @@ job has probably already completed by now, so submit a new one first:
 $ condor_submit tutorial01.submit
 Submitting job(s).
 1 job(s) submitted to cluster 823
-$ watch -n 5 "condor_q $USER 2&gt;/dev/null"
+$ watch -n 5 "condor_q $USER 2>/dev/null"
 ~~~
 
 When your job has completed, it will disappear from the list.  To close
