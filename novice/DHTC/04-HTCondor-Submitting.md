@@ -277,12 +277,33 @@ $ condor_rm username
 All jobs of user "username" have been marked for removal
 ~~~
 
-## Job Requirements - A Basic OSG Job ##
 
-HTCondor job and machines are represented as HTCondor classads. These are sets
-of key/value attribute pairs. Let's examine a what a machine classad looks like.
-This is a two step process, first we get a name for one of the machines, and then
-we ask condor_status to give us the details for that machine (-long).
+## Basics of HTCondor Matchmaking
+
+As you have seen in the previous lesson, HTCondor is a batch management system 
+that handles running jobs on a cluster. Like other full-featured batch systems,
+HTCondor provides a job queueing mechanism, scheduling policy, priority scheme, 
+resource monitoring, and resource management. Users submit their jobs to 
+HTCondor scheduler. HTCondor places them into a queue, chooses when and 
+where to run the jobs based upon a policy, carefully monitors their 
+progress, and ultimately informs the user upon completion.  This lesson will 
+go over the some of the specifics of how HTCondor selects compute nodes where 
+it should run particular jobs.  
+
+HTCondor selects nodes on which to run particular jobs using a matchmaking
+process.  When a job is submitted to HTCondor, HTCondor generates a set of 
+attributes that the job needs in order to run.  These attributes function 
+like classified ads in the newspaper and are called classads.  The classads 
+for a job indicate what it is looking for, just like a help wanted ad.  For
+example:
+
+~~~
+Requirements = OSGVO_OS_STRING == "RHEL 6" && Arch == "X86_64" && HAS_MODULES == True
+~~~
+
+Let's examine a what a machine classad looks like. This is a two step
+process, first we get a name for one of the machines, and then we ask
+condor_status to give us the details for that machine (-long).
 
 ~~~
 $ condor_status -pool glidein.unl.edu -af Name | head -n 1
@@ -292,6 +313,13 @@ HAS_FILE_usr_lib64_libgfortran_so_3 = true
 HAS_MODULES = false
 OSGVO_OS_STRING = "RHEL 6"
 ~~~
+
+HTCondor takes a list of classads from jobs and from compute nodes and then
+tries to make the classads with job requirements with the classads with compute
+node capabilities.  When the two match, HTCondor will run the job on the
+compute node.
+
+## A Basic OSG Job ##
 
 You can make use any of these attributes to limit where your jobs go. The following
 is a fairly complete OSG job which you can use when getting started on OSG. Note
