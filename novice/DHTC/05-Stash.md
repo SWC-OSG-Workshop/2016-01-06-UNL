@@ -84,30 +84,29 @@ This use case is essentially just a combination of the prior two use cases.  As
 such, inputs can be handled using a web server or OASIS and transferring outputs
 will probably need some discussion with us to determine the best solution.
 
-<h2>Exploring the Stash system</h2>
+<h2>Intial setup on Crane</h2>
 
-First, we'll look at accessing Stash from the login node. You'll need to log
-in to Crane:
+First, do some initial setup on Crane to faciliate some of the later 
+exercises. You'll need to log in to Crane:
 
 ~~~
 ssh username@crane.unl.edu #Connect to the login node with your username
 passwd:       # your password
 ~~~
 
-Once done, you can change to the `stash` directory in your home area:
+Once done, create a directory to work in
 
 ~~~
-$ cd ~/stash    
+$ mkdir ~/transfer    
+$ cd ~/transfer    
 ~~~
 
-This directory is an area on Stash that you can use to store files and
-directories.  It functions just like any other UNIX directory although it has
-additional functions that we'll go over shortly.
+This directory is will serve as an area to create files and directories that
+we'll try to transfer from Crane to your laptop and vice versa.
 
-For future use, let's create a file in Stash:
+For future use, let's create a file:
 
 ~~~
-$ cd ~/stash
 $ echo "Hello world" > my_hello_world
 ~~~
 
@@ -119,19 +118,19 @@ $ mkdir my_directory
 
 
 
-<h2>Transferring files to and from Stash using SCP </h2> 
+<h2>Transferring files to and from Crane using SCP </h2> 
 
 We can transfer files to Stash using `scp`. First, let's 
 look at transferring files using `scp`.  `Scp` is a counterpart to ssh that allows for
 secure, encrypted file transfers between systems using your ssh credentials.    
 
-To transfer a file from Stash using `scp`, you'll need to run `scp` with the
+To transfer a file from Crane using `scp`, you'll need to run `scp` with the
 source and destination.  Files on remote systems are indicated using
 user@machine:/path/to/file .  Let's copy the file we just created from Stash to
 our local system:
 
 ~~~
-$ scp username@login.duke.ci-connect.net:~/stash/my_hello_world .
+$ scp username@crane.unl.edu:~/transfer/my_hello_world .
 ~~~
 
 As you can see, `scp` uses similar syntax to the `cp` command that you were shown
@@ -139,7 +138,7 @@ previously.  To copy directories using `scp`, you'll just pass the `-r` option t
 it.  E.g:
 
 ~~~
-$ scp -r username@crane.unl.edu:~/my_directory .
+$ scp -r username@crane.unl.edu:~/transfer/my_directory .
 ~~~
 
 > #### Challenges
@@ -147,7 +146,7 @@ $ scp -r username@crane.unl.edu:~/my_directory .
 > * Create a directory with a file called `hello_world_2` in the `~/stash` directory and copy it from Stash to your local system.
 > * Create a directory called `hello_world_3` on your local system and copy it to the `data` directory.
 
-<h2>Transferring files to and from Stash using Globus</h2>
+<h2>Transferring files to and from Crane using Globus</h2>
 An alternate method for accessing Stash is to use Globus.  Globus allows you
 to initiate transfers between Globus endpoints and will handle the actual file
 and directory transfers transparently without needing further input from you.
@@ -190,37 +189,17 @@ laptop by selecting it in the Stash window and selecting the left arrow.
 > * Next copy the `my_hello_world` file from Stash to your laptop using Globus.
 
 
-<h2>Transferring files from Stash using HTTP</h2>
-Stash also allows you to access files using your web browser.  In order to do
-this, you'll need to put your file in `~/public`or `~/stash/public` (the two locations 
-point to the same directory). Any file or directory that is placed 
-here  will be made available in the Stash webserver.  Let's make a file
-available using the Stash webserver
-
-~~~
-$ cd ~/public
-$ echo "This is served over the web" > web-file
-~~~
-
-Now go to `http://stash.osgconnect.net/+username/` in your browser.  You should
-see the file in the listing.  Clicking on the file should give you the contents.
-
-> #### Challenge 
->
-> * Create a file called `my-web-file` and make it available through the Stash webserver.
-
-
-<h2>Using data on Stash in compute jobs</h2> 
+<h2>Using data on Crane in compute jobs</h2> 
 
 Let us do an example calculation to understand the use of Stash and how we download 
 the data from the web. We will peform a  molecular dynamics simulation of a small 
 protein in implicit water. To get the necessary files, we use the *tutorial* command on 
 OSG. 
 
-Log in to Duke Connect:
+Log in to Crane:
 
 ~~~
-$ ssh username@login.duke.ci-connect.net
+$ ssh username@crane.unl.edu
 ~~~
 
 Type:
