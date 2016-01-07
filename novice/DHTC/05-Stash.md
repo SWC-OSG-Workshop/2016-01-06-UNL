@@ -12,23 +12,85 @@ title: Data storage and transfer
 
 
 <h2> Overview </h2>
-In this lesson, we will learn the basics of data storage and transfer on Duke Connect. 
+In this lesson, we will learn the basics of data storage and transfer for DHTC jobs and on Crane. 
 
-<h2> Stash </h2>
-Duke Connect provides a storage system called Stash.  Stash provides a place to
-store data needed for jobs or output from jobs in the medium term.  Since
-Stash is not backed up, you should transfer job outputs from Stash to your
-local system as soon as practical.
+<h2>Introduction to Data Handling for DHTC jobs</h2>
+Data handling is one of the trickiest parts of effectively using DHTC computing.
+New users often run into issues in regards to effectively transferring inputs to compute
+jobs or with getting output back.  However, most situations can be broken down
+into a few basic use cases: 
+   * Jobs without large inputs or outputs
+   * Jobs with large inputs but small outputs
+   * Jobs with small inputs but large outputs
+   * Jobs with both large inputs and large outputs
 
-This lesson will go over accessing Stash using the Duke Connect login node as
-well as other methods such as Globus, and HTTP.
+We will consider each use case one by one.
+
+<h3>Jobs without large inputs or outputs</h3>
+Jobs without large inputs or outputs are the easiest case to handle.   If jobs
+have inputs and outputs that are smaller than ~1 gigabyte then the builtin HTCondor
+file transfer mechanims will work to handle transfers to and from the compute node.  
+Input files can be specified using the =transfer_input_files= option in your
+submit file.  Likewise output files and directions can be specified using
+=transfer_output_files=.  Once the input and output files are given to HTCondor,
+it will automatically transfer the input files to compute nodes when jobs are
+scheduled to run and then transfer the output after the job completes back to
+your submit node.
+
+<h3>Jobs with large inputs but small outputs</h3>
+Jobs with large inputs but small outputs are a little harder to handle.
+Examples of these types of jobs, would be things such as BLAST which does
+searches for similar DNA sequences.  The inputs (DNA reference databases and DNA
+sequence of interest) can easily be tens or hundreds gigabytes.  However, the
+output (locations of similar sequences and similarity of these sequences) tends
+to be kilobytes or megabytes in size.  
+
+If the majority of the inputs are databases or reference files a possible
+solution would be to place the input files on a publicly accessible webserfer.
+Then jobs would wget the appropriate files when they start running.  Since most
+OSG sites have a Squid server, this will minimize the network traffic outside of
+the site running your jobs.  If the majority of the input is in reference files
+that are identical between jobs, then another alternative would be to use a
+service such as OASIS that will make the reference files available on the
+majority of OSG sites.  Jobs can then access the files as if they are on the
+compute node and only the files that are accessed will be transferred.  If the
+input files need to remain private or if the inputs drastically change between
+jobs, you should probably discuss this with us so that we can help you come up
+with a good solution.
+
+Since the output files are small (i.e. < ~1GB), using the =transfer_output_files= option
+in your submit file and allowing HTCondor to manage transferring outputs from
+the compute nodes to the submit node should work without problems.
+
+<h3>Jobs with small inputs and large outputs</h3>
+This use case deals with jobs that generate large outputs from a small set of
+inputs.  For example, a simulation may generate a large data set showing the
+evolution of a physical system based on a small set of input parameters.  
+
+The inputs for this type of jobs can be handled using the HTCondor transfer
+mechanisms.  By using the =transfer_input_files= option in your submit file,
+HTCondor will automatically handle transferring inputs to compute nodes when
+your job runs.  
+
+The outputs for this type of job are more difficult to handle.  Solutions may
+range from compressing the outputs to generate smaller, more manageable files to
+setting up or utilizing a service like gridftp to copy files back to your login
+node or a storage system for later retrieval.  Regardless, it is probably best
+to talk to us so that we can come up with the best solution for your transfer
+needs. 
+
+<h3>Jobs with both large inputs and large outputs</h3>
+This use case is essentially just a combination of the prior two use cases.  As
+such, inputs can be handled using a web server or OASIS and transferring outputs
+will probably need some discussion with us to determine the best solution.
+
 <h2>Exploring the Stash system</h2>
 
 First, we'll look at accessing Stash from the login node. You'll need to log
-in to Duke Connect:
+in to Crane:
 
 ~~~
-ssh username@login.duke.ci-connect.net #Connect to the login node with your username
+ssh username@crane.unl.edu #Connect to the login node with your username
 passwd:       # your password
 ~~~
 
@@ -77,7 +139,7 @@ previously.  To copy directories using `scp`, you'll just pass the `-r` option t
 it.  E.g:
 
 ~~~
-$ scp -r username@login.duke.ci-connect.net:~/stash/my_directory .
+$ scp -r username@crane.unl.edu:~/my_directory .
 ~~~
 
 > #### Challenges

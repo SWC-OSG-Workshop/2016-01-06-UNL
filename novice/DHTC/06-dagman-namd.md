@@ -114,9 +114,9 @@ Let's monitor the job status every two seconds.  (Recall `connect watch`
 from a previous lesson.)
 
 ~~~
-$ connect watch 2
+$ watch -n 1 condor_q username
 
--- Submitter: login01.osgconnect.net : <192.170.227.195:48781> : login01.osgconnect.net
+-- Submitter: crane.unl.edu : <192.170.227.195:48781> : crane.unl.edu
  ID      OWNER            SUBMITTED     RUN_TIME ST PRI SIZE CMD               
 1317646.0   username          10/30 17:27   0+00:00:28 R  0   0.3  condor_dagman     
 1317647.0   username          10/30 17:28   0+00:00:00 I  0   0.0  namd_run_job0.sh  
