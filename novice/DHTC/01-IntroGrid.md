@@ -168,17 +168,9 @@ tutorial command sets up the R tutorial for you.
 ~~~
 $ tutorial R  # prints the following message:
 
-
-Application Example - R (statistical analysis)
-
-This tutorial will introduce you to using the R statistical programming
-language on OSG Connect. By the end of the tutorial:
-
-   * You will have set up R from the OSG OASIS service on the submit host
-   * You will know how to use the HAS_CVMFS_oasis_opensciencegrid_org job steering requirement. 
-
-Tutorial 'R' is set up.  To begin:
-     cd ~/osg-R
+Installing R (master)...
+Tutorial files installed in ./tutorial-R.
+Running setup in ./tutorial-R...
 ~~~ 
 
 The "tutorial R" command creates a directory "osg-R" containing the neccessary script and input files. 
@@ -197,10 +189,18 @@ method.  The R-wrapper.sh essentially loads the R module and runs the "mciP.R"
 script. 
 
 ~~~
-#!/bin/bash # Defines the shell environment.
-source /cvmfs/oasis.opensciencegrid.org/osg/modules/lmod/5.6.2/init/bash
-module load R    # Loads the module 
-Rscript  mcpi.R  # Execution of the R script
+#!/bin/bash
+
+EXPECTED_ARGS=1
+
+if [ $# -ne $EXPECTED_ARGS ]; then
+  echo "Usage: R-wrapper.sh file.R"
+  exit 1
+else
+  source /cvmfs/oasis.opensciencegrid.org/osg/modules/lmod/current/init/bash
+  module load R
+  Rscript $1
+fi
 ~~~
 
 Similar to the R tutorial, there are other tutorials available on OSG. The available 
