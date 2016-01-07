@@ -288,7 +288,7 @@ Cumulative job badput wall time as seen from submit side :
 
 
 > ### On your own
-> * Start a new workflow with a larger input data set. Copy all the files in the `many-more-inputs` directory to the `inputs` directory, and run `./submit`. Check the status with `pegasus-status`
+> * Start a new workflow with a larger input data set. Copy all the files in the `many-more-inputs` directory to the `inputs` directory (`cp many-more-inputs/* inputs/`), and run `./submit`. Check the status with `pegasus-status`
 > * A nice feature is that failed/stopped workflows can be recovered from where they left of. While
 the workflow is running, use `pegasus-remove [dir]` to stop the workflow. Wait for the jobs to leave the queue, and then use `pegasus-run [dir]` to start the workflow up again.
 

@@ -32,6 +32,14 @@ $ ssh username@crane.unl.edu    # username is your username
 password:                       # enter your password
 ~~~
 
+You will be requested to verify the login with [Duo](https://hcc-docs.unl.edu/display/HCCDOC/Setting+up+and+using+Duo)
+
+To get the OSG environment loaded, run:
+
+~~~
+$ source osg_oasis_init
+~~~
+
 We will get our example files for all today's lessons using `tutorial`.
 
 Let's get started with the *quickstart* tutorial:
@@ -199,7 +207,7 @@ job has probably already completed by now, so submit a new one first:
 $ condor_submit tutorial01.submit
 Submitting job(s).
 1 job(s) submitted to cluster 823
-$ watch -n 5 condor_q
+$ watch -n 5 "condor_q $USER 2&gt;/dev/null"
 ~~~
 
 When your job has completed, it will disappear from the list.  To close
@@ -257,14 +265,15 @@ $ condor_rm 829
 Cluster 829 has been marked for removal.
 ~~~
 
-Or alternately:
+Sometimes it is useful to remove all your jobs. You can do that by specifying your username
+as argument for condor_rm:
 
 ~~~
 $ condor_submit tutorial01.submit
 Submitting job(s).
 1 job(s) submitted to cluster 829
-$ condor_rm 829.0
-Job 829.0 has been marked for removal.
+$ condor_rm username
+All jobs of user "username" have been marked for removal
 ~~~
 
 ## Job Requirements - A Basic OSG Job ##
@@ -293,7 +302,7 @@ Universe = vanilla
 
 # These are good base requirements for your jobs on OSG. It is specific on OS and
 # OS version, core cound and memory, and wants to use the software modules. 
-Requirements = OSGVO_OS_STRING == "RHEL 6" && HAS_MODULES == True
+Requirements = OSGVO_OS_STRING == "RHEL 6" && Arch == "X86_64" && HAS_MODULES == True
 request_cpus = 1
 request_memory = 1 GB
 
