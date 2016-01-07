@@ -110,7 +110,6 @@ Submitting job(s).........................
 Apply your `condor_q` knowledge to see this job
 progress. Execute the following bash script to compute the average from all the jobs.
 
-Once the jobs are completed, you might want to invoke the script 
 
 ## Post process 
 
@@ -121,6 +120,16 @@ $./mcpi_ave.bash
 ~~~
 
 to compute the average value of pi from all the available outputs.  
+
+
+## Challenges
+<div class="challenge" markdown="1">
+Can you get a more accurate estimation of Pi? First try to make longer jobs by increasing
+the value in `montecarloPi(1000)`.
+</div>
+<div class="challenge" markdown="1">
+Can you get a more accurate estimation of Pi by increasing the number of jobs from 100 to 1000? 
+</div>
 
 
 # Optimization Tool box: Simulated Annealing
@@ -152,7 +161,7 @@ This will create a directory `tutorial-matlab-SimulatedAnnealing`. Inside the di
     simple_objective.m     # matlab script - defines the actual objective function
     SA_Opt                 # matlab compiled binary
     SA_Opt.submit          # Condor job description file
-    SA_Opt.sh          # Executable file
+    SA_Opt.sh              # Executable file
     Log/                   # Directory to copy standard output, error and log files from condor jobs.
 
 
@@ -207,25 +216,36 @@ Check  further details of compilation process in the [lesson on basics of MATLAB
 
 Let us take a look at `SA_Opt.submit` file:⋅
 
+~~~
+Universe = vanilla  
 
-    Universe = vanilla                          # One OSG Connect vanilla, the prefered job universe is "vanilla"
+# These are good base requirements for your jobs on OSG. It is specific on OS and
+# OS version, core count and memory, and wants to use the software modules. 
+Requirements = OSGVO_OS_STRING == "RHEL 6" && Arch == "X86_64" &&  HAS_MODULES == True
+request_cpus = 1
+request_memory = 1 GB
 
-    Executable =  SA_Opt.sh    # Job execution file which is transfered to worker machine
-    Arguments = $(Process)     #  process ID passed as an argument
-    transfer_input_files = SA_Opt               # list of file(s) need be transfered to the remote worker machine⋅
+Executable = SA_Opt.sh
+Arguments = $(Process)
 
-    Output = Log/job.$(Process).out⋅            # standard ouput⋅
-    Error =  Log/job.$(Process).err             # standard error
-    Log =    Log/job.$(Process).log             # log information about job execution
+transfer_input_files =  SA_Opt
 
-    requirements = HAS_CVMFS_oasis_opensciencegrid_org =?= True   && OpSysMajorVer > 5 # Check if the worker machine has CVMFS⋅
+Output = Log/job.$(Process).out 
+Error =  Log/job.$(Process).err
+Log =    Log/job.$(Process).log
 
-    queue 10                                   # Submit 10  jobs
+# Send the job to Held state on failure. 
+on_exit_hold = (ExitBySignal == True) || (ExitCode != 0)
 
-The above job description instructs condor to submit 10 jobs. Each job would start with different random⋅
-intial conditions.⋅
+# Periodically retry the jobs every 1 hour, up to a maximum of 5 retries.
+periodic_release =  (NumJobStarts < 5) && ((CurrentTime - EnteredCurrentStatus) > 60)
 
-The executable is a wrapper⋅ script `SA_Opt.sh`
+queue 10
+~~~
+
+The above job description instructs condor to submit 10 jobs. Each job would start with different random intial conditions.
+
+The executable is a wrapper script `SA_Opt.sh`
 
     #!/bin/bash⋅
     source /cvmfs/oasis.opensciencegrid.org/osg/modules/lmod/current/init/bash
