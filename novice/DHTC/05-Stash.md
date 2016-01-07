@@ -30,9 +30,9 @@ We will consider each use case one by one.
 Jobs without large inputs or outputs are the easiest case to handle.   If jobs
 have inputs and outputs that are smaller than ~1 gigabyte then the builtin HTCondor
 file transfer mechanims will work to handle transfers to and from the compute node.  
-Input files can be specified using the =transfer_input_files= option in your
+Input files can be specified using the `transfer_input_files` option in your
 submit file.  Likewise output files and directions can be specified using
-=transfer_output_files=.  Once the input and output files are given to HTCondor,
+`transfer_output_files`.  Once the input and output files are given to HTCondor,
 it will automatically transfer the input files to compute nodes when jobs are
 scheduled to run and then transfer the output after the job completes back to
 your submit node.
@@ -58,7 +58,7 @@ input files need to remain private or if the inputs drastically change between
 jobs, you should probably discuss this with us so that we can help you come up
 with a good solution.
 
-Since the output files are small (i.e. < ~1GB), using the =transfer_output_files= option
+Since the output files are small (i.e. < ~1GB), using the `transfer_output_files` option
 in your submit file and allowing HTCondor to manage transferring outputs from
 the compute nodes to the submit node should work without problems.
 
@@ -68,7 +68,7 @@ inputs.  For example, a simulation may generate a large data set showing the
 evolution of a physical system based on a small set of input parameters.  
 
 The inputs for this type of jobs can be handled using the HTCondor transfer
-mechanisms.  By using the =transfer_input_files= option in your submit file,
+mechanisms.  By using the `transfer_input_files` option in your submit file,
 HTCondor will automatically handle transferring inputs to compute nodes when
 your job runs.  
 
@@ -143,11 +143,11 @@ $ scp -r username@crane.unl.edu:~/transfer/my_directory .
 
 > #### Challenges
 >
-> * Create a directory with a file called `hello_world_2` in the `~/stash` directory and copy it from Stash to your local system.
-> * Create a directory called `hello_world_3` on your local system and copy it to the `data` directory.
+> * Create a directory with a file called `hello_world_2` in the `~/transfer` directory and copy it from Stash to your local system.
+> * Create a directory called `hello_world_3` on your local system and copy it to the `transfer` directory.
 
 <h2>Transferring files to and from Crane using Globus</h2>
-An alternate method for accessing Stash is to use Globus.  Globus allows you
+An alternate method for accessing your files on Crane is to use Globus.  Globus allows you
 to initiate transfers between Globus endpoints and will handle the actual file
 and directory transfers transparently without needing further input from you.
 When the transfer is complete, Globus will send a notification to you indicating
@@ -162,8 +162,8 @@ the globus connect personal installer specific to your system.
 While that's running, you'll need to get a setup key from Globus in order to
 setup the Globus Connect Personal software.  
 
-*   First login to [Duke Connect](http://duke.ci-connect.net) using your Duke Connect username and password
-*   Next go to this [page](https://portal.duke.ci-connect.net/xfer/ManageEndpoints#)
+*   First go to the [Globus](http://globus.org) page and register or login
+*   Next go to this [page](https://globus.org/xfer/ManageEndpoints#)
 *   Click on the add Globus Connect Personal link
 *   Enter a name for your endpoint on the page (remember this!)
 *   Click on "Generate setup Key"
@@ -173,114 +173,22 @@ Finally, start the Globus online personal software that you just installed.  The
 installer will ask for the setup key that you obtained from the Globus website.
 At this point, the install and setup of Globus Connect Personal is complete.
 
-Now go to [http://duke.ci-connect.net](http://login.duke.ci-connect.net) and under the
-Transfer menu, select Start Transfer.  For the first endpoint, enter username#name
+Now go to [Globus](https://www.globus.org/app/transfer). 
+For the first endpoint, enter username#name
 where name is the name you choose for the endpoint above. You should now see the
 files from your laptop displayed.  For the second endpoint, enter
-`connect#stash` and hit enter.  You should now see the contents of your home
-directory on Duke Connect.  Now double click on the `data` directory.  Select a
+`hcc#crane` and hit enter.  You should now see the contents of your home
+directory on Crane.  Now double click on the `transfer` directory.  Select a
 file on your laptop and click on the right arrow on the top of the screen to
-start a transfer to Stash. You can transfer files or directories to your
-laptop by selecting it in the Stash window and selecting the left arrow.
+start a transfer to Crane. You can transfer files or directories to your
+laptop by selecting it in the Crane window and selecting the left arrow.
 
 > #### Challenges 
 >
-> * Copy a file to Stash from your laptop using Globus.  
-> * Next copy the `my_hello_world` file from Stash to your laptop using Globus.
+> * Copy a file to Crane from your laptop using Globus.  
+> * Next copy the `my_hello_world` file from Crane to your laptop using Globus.
 
 
-<h2>Using data on Crane in compute jobs</h2> 
-
-Let us do an example calculation to understand the use of Stash and how we download 
-the data from the web. We will peform a  molecular dynamics simulation of a small 
-protein in implicit water. To get the necessary files, we use the *tutorial* command on 
-OSG. 
-
-Log in to Crane:
-
-~~~
-$ ssh username@crane.unl.edu
-~~~
-
-Type:
-
-~~~
-$ tutorial stash-namd
-$ cd ~/tutorial-stash-namd
-~~~
-
-*Aside*: [NAMD](http://www.ks.uiuc.edu/Research/namd/) is a widely used molecular dynamics simulation program. It lets users specify a molecule in some initial state and then observe its time evolution subject to forces. Essentially, it lets you go from a specifed molecular [structure](http://en.wikipedia.org/wiki/Superoxide_dismutase#mediaviewer/File:Superoxide_dismutase_2_PDB_1VAR.png) to a [simulation](https://www.youtube.com/watch?v=mk3cLd9PUPA&list=PL418E1C62DD9FC8BA&index=1) of its behavior in a particular environment.  It has been used to study polio eradication, similations of graphene, and studies of biofuels.
-
-You should see the following files in the directory:
-
-~~~
-$ ls
-namd_stash_run.sh      par_all27_prot_lipid.inp  ubq_gbis_eq.conf  ubq.psf
-namd_stash_run.submit  README.md         ubq.pdb
-~~~
-
-The files 
-~~~
-namd_stash_run.submit #HTCondor job submission script file.
-namd_stash_run.sh #Job execution script file.
-ubq_gbis_eq.conf #Input configuration for NAMD.
-ubq.pdb #Input pdb file for NAMD.
-ubq.psf #Input file for NAMD.
-par_all27_prot_lipid.inp #Parameter file for NAMD.
-~~~
-
-The file `par_all27_prot_lipid.inp` is the parameter file and is required for 
-the NAMD simulations. The parameter file is common data file for the NAMD
-simulations. It is a good practice to keep the common files, like  the parameter file 
-in our example, in the Stash storage.  
-
-~~~
-mv par_all27_prot_lipid.inp ~/public/.  
-~~~
-
-You can view the parameter file using your web browser by going to 
-`http://stash.osgconnect.net/+yourusername`.
-
-Now we want the parameter file available on the execution (worker) machine when the 
-simulation starts to run. As mentioned early, the data on the Stash is available to 
-the execution machines. This means the execution machine can transfer the data from 
-Stash as a part of the job execution. So we have to script this in the job execution 
-script. 
-
-You can see that the job script `namd_stash_run.sh` has the following lines:
-
-~~~
-$ cat namd_stash_run.sh
-#!/bin/bash 
-source /cvmfs/oasis.opensciencegrid.org/osg/modules/lmod/5.6.2/init/bash 
-module load namd/2.9  
-wget http://stash.osgconnect.net/+username/par_all27_prot_lipid.inp  
-namd2 ubq_gbis_eq.conf  
-~~~
-
-In the above script, you will have to insert your "username" in URL address. The
-parameter file located on Stash is downloaded using the `wget` utility.  
- 
-
-Now we submit the NAMD job. 
-
-~~~
-$ condor_submit namd_stash_run.submit 
-~~~
-
-Once the job completes, you will see non-empty `namdoutput_using_stash.dat` file where 
-the standout output from the programs is written.
-
-~~~
-$ tail  namdoutput_using_stash.dat
-
-WallClock: 6.084453  CPUTime: 6.084453  Memory: 53.500000 MB
-Program finished.
-~~~
-
-The above lines indicate the NAMD simulation was successful. 
-
- 
 <div class="keypoints" markdown="1">
 
 #### Key Points
