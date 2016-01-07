@@ -23,11 +23,21 @@ running. Using the `-better-analze` flag with `condor_q` can show you detailed i
 $ condor_q -better-analyze JOB-ID -pool POOL-NAME
 ~~~
 
-Let's do an example. First we'll need to login as usual, and then load the tutorial *error101*.
+Let's try looking at  an example. First we'll need to login as usual, and then load the tutorial *error101*.
 
 ~~~
 $ ssh username@crane.unl.edu
+~~~
 
+Next  setup our environment, if we haven't done so yet:
+
+~~~
+$ source osg_oasis_init
+~~~
+
+Finally, let's load the tutorial:
+
+~~~
 $ tutorial error101
 $ cd tutorial-error101
 $ condor_submit error101_job.submit 
@@ -39,10 +49,12 @@ We'll check the job status the normal way:
 condor_q username
 ~~~
 
-For some reason, our job is still idle. Why? Try using `condor_q -better-analyze` to find out. Remember that you will also need to specify a pool name. In this case we'll use `osg-flock.grid.iu.edu`:
+For some reason, our job is still idle. Why? Try using `condor_q -better-analyze` 
+to find out. Remember that you will also need to specify a pool name. In this case 
+we'll use `glidein.unl.edu`:
 
 ~~~
-$ condor_q -better-analyze JOB-ID -pool osg-flock.grid.iu.edu
+$ condor_q -better-analyze JOB-ID -pool glidein.unl.edu
  
 # Produces a long ouput. 
 # The following lines are part of the output regarding the job requirements.  
@@ -51,18 +63,22 @@ The Requirements expression for your job reduces to these conditions:
 
 Suggestions:
 
+
+
     Condition                         Machines Matched    Suggestion
     ---------                         ----------------    ----------
-1   ( TARGET.Memory >= 2097152 )      0                   MODIFY TO 225687
-2   ( TARGET.Arch == "X86_64" )       12529                
-3   ( TARGET.OpSys == "LINUX" )       12529                
-4   ( TARGET.Disk >= 1 )              12529                
-5   ( ( TARGET.HasFileTransfer ) || ( TARGET.FileSystemDomain == "crane.unl.edu" ) )
-                                      12529    
+1   ( TARGET.Memory >= 2097152 )      0                   MODIFY TO 3500
+2   ( TARGET.Arch == "X86_64" )       94
+3   ( TARGET.OpSys == "LINUX" )       94
+4   ( TARGET.Disk >= 1 )              94
+5   ( ( TARGET.HasFileTransfer ) || ( TARGET.FileSystemDomain == "login.crane.hcc.unl.edu" ) )
+
 ~~~
 
-By looking through the match conditions, we see that many nodes match our requests for the Linux operating system and the x86_64 architecture, but none of them match our requirement for 2097152 MB of memory. This is an error we introduced 
-puposefully in the script by including a line *request_memory = 2 TB* in the file "error101_job.submit". 
+By looking through the match conditions, we see that many nodes match our requests for the 
+Linux operating system and the x86_64 architecture, but none of them match our requirement 
+for 2097152 MB of memory. This is an error we introduced puposefully in the script by 
+including a line *request_memory = 2 TB* in the file "error101_job.submit". 
 
 We want to edit the job submit file and change the requirements such that we only request 512 MB of memory. The request_memory line should look like this: *request_memory = 2 GB*
 
@@ -80,10 +96,9 @@ $ condor_submit error101_job.submit
 <br/>
 
 > ### On your own
-> * Use the `connect status` command to get a list of pools (e.g., `osg-flock.grid.iu.edu`) <br/>
 > * Edit `error101_job.submit`, add a `Requirements` line with `Requirements = OSGVO_OS_STRING == "RHEL 8"` before the `queue` statement. <br/>
 > *  Use `condor_q -better-analyze` against the pool. Does it match any slots? If so, where?
-> *  How about RHEL 6? Hint: you can explora a pool with condor_status' -constraint flag. For example: `condor_status -pool osg-flock.grid.iu.edu -constraint 'OSGVO_OS_STRING == "RHEL 6"'`
+> *  How about RHEL 6? Hint: you can explora a pool with condor_status' -constraint flag. For example: `condor_status -pool glidein.unl.edu -constraint 'OSGVO_OS_STRING == "RHEL 6"'`
 
 <br/>
 <br/>
@@ -112,7 +127,7 @@ However, when the job executed, it went into Held state:
 
 ~~~
 $ condor_q -analyze 372993.0
--- Submitter: crane.unl.edu : <192.170.227.195:56174> : crane.unl.edu
+-- Submitter: login.crane.hcc.unl.edu : <129.93.227.113:9619?noUDP&sock=205992_4558_3> : login.crane.hcc.unl.edu
 ---
 372993.000:  Request is held.
 Hold reason: Error from glidein_9371@compute-6-28.tier2: STARTER at 10.3.11.39 failed to send file(s) to <192.170.227.195:40485>: error reading from /wntmp/condor/compute-6-28/execute/dir_9368/glide_J6I1HT/execute/dir_16393/outputfile: (errno 2) No such file or directory; SHADOW failed to receive file(s) from <192.84.86.100:50805>
