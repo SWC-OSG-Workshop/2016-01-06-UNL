@@ -30,9 +30,9 @@ We will consider each use case one by one.
 Jobs without large inputs or outputs are the easiest case to handle.   If jobs
 have inputs and outputs that are smaller than ~1 gigabyte then the builtin HTCondor
 file transfer mechanims will work to handle transfers to and from the compute node.  
-Input files can be specified using the =transfer_input_files= option in your
+Input files can be specified using the `transfer_input_files` option in your
 submit file.  Likewise output files and directions can be specified using
-=transfer_output_files=.  Once the input and output files are given to HTCondor,
+`transfer_output_files`.  Once the input and output files are given to HTCondor,
 it will automatically transfer the input files to compute nodes when jobs are
 scheduled to run and then transfer the output after the job completes back to
 your submit node.
@@ -58,7 +58,7 @@ input files need to remain private or if the inputs drastically change between
 jobs, you should probably discuss this with us so that we can help you come up
 with a good solution.
 
-Since the output files are small (i.e. < ~1GB), using the =transfer_output_files= option
+Since the output files are small (i.e. < ~1GB), using the `transfer_output_files` option
 in your submit file and allowing HTCondor to manage transferring outputs from
 the compute nodes to the submit node should work without problems.
 
@@ -68,7 +68,7 @@ inputs.  For example, a simulation may generate a large data set showing the
 evolution of a physical system based on a small set of input parameters.  
 
 The inputs for this type of jobs can be handled using the HTCondor transfer
-mechanisms.  By using the =transfer_input_files= option in your submit file,
+mechanisms.  By using the `transfer_input_files` option in your submit file,
 HTCondor will automatically handle transferring inputs to compute nodes when
 your job runs.  
 
