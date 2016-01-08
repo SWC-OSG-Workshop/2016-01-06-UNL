@@ -176,17 +176,24 @@ jobs are located at
 $ cd tutorial-dagman-namd/X-DAG
 ~~~
 
-Again we are missing the `.dag` file here. See if you can write the DAGfile for this example 
+Again we are missing the `.dag` file here. See if you can write the DAGfile for
+this example 
 
 ###Job Retry and Rescue###
 
-In the above examples, the set of jobs have simple inter relationship.  Indeed,  DAGMan is 
-capable of dealing with set of jobs with complex inter relations.  One may also write a DAG 
-file for set of DAG files where each of the DAG file contains the workflow for set of condor jobs.  Also DAGMan can help with the resubmission of uncompleted portions of a DAG, when one or more nodes result in failure.  
+In the above examples, the set of jobs have simple inter relationship.  Indeed,
+DAGMan is capable of dealing with set of jobs with complex inter relations.  One
+may also write a DAG file for set of DAG files where each of the DAG file
+contains the workflow for set of condor jobs.  Also DAGMan can help with the
+resubmission of uncompleted portions of a DAG, when one or more nodes result in
+failure.  
 
 ####Job Retry####
 
-Say for example,  job A2 in the above example is  important and you want to eliminate the possibility as much as possible. One way is to re-try the specific job A2 a few times. DAGMan would re-try  failed jobs when you specify the following line at the end of dag file.
+Say for example,  job A2 in the linear dag example is important and you want to
+make sure that it completes. One way is to re-try the specific job A2 a few
+times.  DAGMan would re-try  failed jobs when you specify the following line at
+the end of dag file.
 
 ~~~ 
 $ nano linear.dag #open the linear.dag file
@@ -205,13 +212,14 @@ Retry A3 7 #This means re-try job A3 for seven times in case of failures.
  
 ####Rescue DAG####
 
-In case DAGMan  does not complete the set of jobs, it would create a rescue DAG file with a 
-suffix `.rescue`. The rescue DAG file contains the information about where to restart 
-the jobs. Say for example, in our workflow of four linear jobs, the jobs A0 and A1 are 
-finished and A2 is incomplete. In such a case we do not want to start executing the jobs 
-all over again rather we want to start from Job A2. This information is embedded 
-in the rescue dag file. In our example of linear.dag, the rescue dag file would 
-be `linear.dag.rescue`. So we re-submit the rescue dag file as follows
+In case DAGMan can not complete the set of jobs, it would create a rescue DAG
+file with a suffix `.rescue`. The rescue DAG file contains the information about
+where to restart the jobs. Say for example, in our workflow of four linear jobs,
+the jobs A0 and A1 are finished and A2 is incomplete. In such a case we do not
+want to start executing the jobs all over again rather we want to start from Job
+A2. This information is embedded in the rescue dag file. In our example of
+linear.dag, the rescue dag file would be `linear.dag.rescue`. So we re-submit
+the rescue dag file as follows
 
 ~~~
 $ condor_submit_dag linear.dag.rescue
