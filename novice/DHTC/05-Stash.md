@@ -252,7 +252,7 @@ the input configuration for the NAMD simulations.
 
 > #### Challenges
 >
-> * You can find the missing files at https://stash.osgconnect.net/+sthapa/tutorial-namd, 
+> * You can find the missing files at [here](https://stash.osgconnect.net/+sthapa/tutorial-namd), 
     download the files from that website and upload it to the tutorial-namd file on Crane.
 
 Now submit the NAMD job. 
