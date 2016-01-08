@@ -232,15 +232,15 @@ You should see the following files in the directory:
 
 ~~~
 $ ls
-namd_stash_run.sh      ubq.psf
-namd_stash_run.submit  README.md         ubq.pdb
+namd_run.sh  namd_run.submit     README.md
+ubq.pdb      ubq.psf
 ~~~
 
 The files 
 
 ~~~
-namd_stash_run.submit #HTCondor job submission script file.
-namd_stash_run.sh #Job execution script file.
+namd_run.submit #HTCondor job submission script file.
+namd_run.sh #Job execution script file.
 ubq.pdb #Input pdb file for NAMD.
 ubq.psf #Input file for NAMD.
 ~~~
