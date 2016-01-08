@@ -257,7 +257,7 @@ $ pegasus-statistics [wfdir]
 #   The wall time from the start of the workflow execution to the end as
 #   reported by the DAGMAN.In case of rescue dag the value is the
 #   cumulative of all retries.
-# Workflow cumulative job wall time:
+# Cumulative job wall time:
 #   The sum of the wall time of all jobs as reported by kickstart.
 #   In case of job retries the value is the cumulative of all retries.
 #   For workflows having sub workflow jobs (i.e SUBDAG and SUBDAX jobs),
@@ -269,7 +269,7 @@ $ pegasus-statistics [wfdir]
 #   is the cumulative of all retries. For workflows having sub workflow
 #   jobs (i.e SUBDAG and SUBDAX jobs), the wall time value includes jobs
 #   from the sub workflows as well.
-# Workflow cumulative job badput wall time:
+# Cumulative job badput wall time:
 #   The sum of the wall time of all failed jobs as reported by kickstart.
 #   In case of job retries the value is the cumulative of all retries.
 #   For workflows having sub workflow jobs (i.e SUBDAG and SUBDAX jobs),
@@ -289,9 +289,9 @@ Sub-Workflows  0         0       0           0         0         0
 ------------------------------------------------------------------------------
 
 Workflow wall time                                       : 2 mins, 23 secs
-Workflow cumulative job wall time                        : 48 secs
+Cumulative job wall time                                 : 48 secs
 Cumulative job wall time as seen from submit side        : 1 min, 13 secs
-Workflow cumulative job badput wall time                 : 
+Cumulative job badput wall time                          : 
 Cumulative job badput wall time as seen from submit side : 
 ~~~
 
@@ -299,7 +299,7 @@ For real life computations, we expect the cumulative job wall time to be much gr
 
 ~~~
 Workflow wall time                                       : 18 hours, 32 mins
-Workflow cumulative job wall time                        : 346 years, 23 days
+Cumulative job wall time                                 : 346 years, 23 days
 ~~~
 
 
