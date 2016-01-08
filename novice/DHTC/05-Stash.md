@@ -115,9 +115,18 @@ In addition, let's create a directory as well for future use:
 $ mkdir my_directory
 ~~~
 
+Also, note that there is a separate space that should be used for I/O intensive
+tasks at `/work/<group>/<username>`.
 
+<h2>Transferring files to and from Crane using SCP (Windows)</h2>
+Unlike with OS X or Linux/Unix systems, Windows doesn't come with scp installed
+by default.  Instead, we will use an application called WinSCP that provides a
+GUI interface for scp. The procedure to login to Crane using WinSCP can be found 
+[here](https://hcc-docs.unl.edu/display/HCCDOC/For+Windows+Users).  Note, that
+rather than using `tusker.unl.edu` as the hostname, you should use
+`crane.unl.edu`.
 
-<h2>Transferring files to and from Crane using SCP </h2> 
+<h2>Transferring files to and from Crane using SCP (OS X or Linux/Unix)</h2> 
 
 We can transfer files to Crane using `scp`. First, let's 
 look at transferring files using `scp`.  `Scp` is a counterpart to ssh that allows for
