@@ -16,16 +16,18 @@ In this lesson, we'll learn how to troubleshoot jobs that never start or fail in
 <h2> Troubleshooting techniques </h2> 
 
 <h3> Diagnostics with condor_q  </h3> 
-The `condor_q` command shows the status of the jobs and it can be used to diagnose why jobs are not 
-running. Using the `-better-analze` flag with `condor_q` can show you detailed information about why 
-a job isn't starting. Since jobs may go to many places, we also need to specify 
-a pool name with the `-pool` flag. 
+The `condor_q` command shows the status of the jobs and it can be used to
+diagnose why jobs are not running. Using the `-better-analze` flag with
+`condor_q` can show you detailed information about why a job isn't starting.
+Since jobs may go to many places, we also need to specify a pool name with the
+`-pool` flag. 
 
 ~~~
 $ condor_q -better-analyze JOB-ID -pool POOL-NAME
 ~~~
 
-Let's try looking at  an example. First we'll need to login as usual, and then load the tutorial *error101*.
+Let's try looking at  an example. First we'll need to login as usual, and then
+load the tutorial *error101*.
 
 ~~~
 $ ssh username@crane.unl.edu
@@ -82,7 +84,9 @@ Linux operating system and the x86_64 architecture, but none of them match our r
 for 2097152 MB of memory. This is an error we introduced puposefully in the script by 
 including a line *request_memory = 2 TB* in the file "error101_job.submit". 
 
-We want to edit the job submit file and change the requirements such that we only request 512 MB of memory. The request_memory line should look like this: *request_memory = 2 GB*
+We want to edit the job submit file and change the requirements such that we
+only request 512 MB of memory. The request_memory line should look like this:
+*request_memory = 2 GB*
 
 ~~~
 $ nano error101_job.submit
@@ -106,7 +110,13 @@ $ condor_submit error101_job.submit
 <br/>
 
 <h3> condor_ssh_to_job </h3> 
-This command allows you to `ssh` to the compute node where the job is running. After running `condor_ssh_to_job`, you will be connected to the remote system, and you will be able to use normal shell commands to investigate your job.
+This command allows you to `ssh` to the compute node where the job is running.
+After running `condor_ssh_to_job`, you will be connected to the remote system,
+and you will be able to use normal shell commands to investigate your job.
+
+Please note running condor_ssh_to_job requires the site the job is running at 
+to enable this feature.  Since several sites on OSG don't enable this feature,
+you may not be able to use this with all of your jobs.
 
 ~~~
 condor_ssh_to_job JOB-ID  
@@ -117,7 +127,10 @@ condor_ssh_to_job JOB-ID
 
 <h3> Held jobs and condor_release </h3>
 
-Occasionally, a job can fail in various ways and go into "Held" state. Held state means that the job has encountered some error, and cannot run. This doesn't necessarily mean that your job has failed, but, for whatever reason, Condor cannot fulfill your request(s).
+Occasionally, a job can fail in various ways and go into "Held" state. Held
+state means that the job has encountered some error, and cannot run. This
+doesn't necessarily mean that your job has failed, but, for whatever reason,
+Condor cannot fulfill your request(s).
 
 In this particular case, a user had this in his or her Condor submit file:
 
