@@ -237,6 +237,7 @@ namd_stash_run.submit  README.md         ubq.pdb
 ~~~
 
 The files 
+
 ~~~
 namd_stash_run.submit #HTCondor job submission script file.
 namd_stash_run.sh #Job execution script file.
@@ -254,7 +255,7 @@ the input configuration for the NAMD simulations.
 > * You can find the missing files at https://stash.osgconnect.net/+sthapa/tutorial-namd , download the files from that website and upload it to the tutorial-namd file on Crane.
 
  Now submit the NAMD job. 
-
+ 
  ~~~
  $ condor_submit namd_run.submit 
  ~~~
