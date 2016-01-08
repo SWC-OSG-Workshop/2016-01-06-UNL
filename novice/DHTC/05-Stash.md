@@ -18,10 +18,11 @@ Data handling is one of the trickiest parts of effectively using DHTC computing.
 New users often run into issues in regards to effectively transferring inputs to compute
 jobs or with getting output back.  However, most situations can be broken down
 into a few basic use cases: 
-   * Jobs with small inputs and outputs
-   * Jobs with large inputs but small outputs
-   * Jobs with small inputs but large outputs
-   * Jobs with both large inputs and large outputs
+
+*   Jobs with small inputs and outputs
+*   Jobs with large inputs but small outputs
+*   Jobs with small inputs but large outputs
+*   Jobs with both large inputs and large outputs
 
 We will consider each use case one by one.
 
