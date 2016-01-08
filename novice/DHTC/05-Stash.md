@@ -252,12 +252,16 @@ the input configuration for the NAMD simulations.
 
 > #### Challenges
 >
-> * You can find the missing files at https://stash.osgconnect.net/+sthapa/tutorial-namd , download the files from that website and upload it to the tutorial-namd file on Crane.
+> * You can find the missing files at https://stash.osgconnect.net/+sthapa/tutorial-namd, 
+    download the files from that website and upload it to the tutorial-namd file on Crane.
 
  Now submit the NAMD job. 
- 
+
+
  ~~~
+ 
  $ condor_submit namd_run.submit 
+ 
  ~~~
 
  Once the job completes, you will see non-empty `ubq_gbis_eq.0.log`
@@ -271,11 +275,14 @@ the input configuration for the NAMD simulations.
 
 You should see:
 
+
  ~~~
+ 
  $ tail  ubq_gbis_eq.0.log
 
  WallClock: 6.084453  CPUTime: 6.084453  Memory: 53.500000 MB
  Program finished.
+ 
  ~~~
 
  The above lines indicate the NAMD simulation was successful. 
