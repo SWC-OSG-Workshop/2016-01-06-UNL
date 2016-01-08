@@ -196,6 +196,88 @@ laptop by selecting it in the Crane window and selecting the left arrow.
 > * Copy a file to Crane from your laptop using Globus.  
 > * Next copy the `my_hello_world` file from Crane to your laptop using Globus.
 
+<h2>Putting it all together</h2>
+
+Let us do an example calculation to give us a taste of a what a typical
+job may involve. We will peform a  molecular dynamics simulation of a
+small protein in implicit water. To get the necessary files, we use the *tutorial*
+command on Crane. 
+
+Log in to Crane and setup the tutorial command:
+
+~~~
+$ ssh username@crane.unl.edu
+$ source osg_oasis_init
+~~~
+
+Type:
+
+~~~
+$ tutorial namd
+$ cd ~/tutorial-namd
+$ rm *.inp
+$ rm *.conf
+~~~
+
+*Aside*: [NAMD](http://www.ks.uiuc.edu/Research/namd/) is a widely used
+molecular dynamics simulation program. It lets users specify a molecule in some
+initial state and then observe its time evolution subject to forces.
+Essentially, it lets you go from a specifed molecular
+[structure](http://en.wikipedia.org/wiki/Superoxide_dismutase#mediaviewer/File:Superoxide_dismutase_2_PDB_1VAR.png)
+to a [simulation](https://www.youtube.com/watch?v=mk3cLd9PUPA&list=PL418E1C62DD9FC8BA&index=1)
+of its behavior in a particular environment.  It has been used to study polio
+eradication, similations of graphene, and studies of biofuels.
+
+You should see the following files in the directory:
+
+~~~
+$ ls
+namd_stash_run.sh      ubq.psf
+namd_stash_run.submit  README.md         ubq.pdb
+~~~
+
+The files 
+~~~
+namd_stash_run.submit #HTCondor job submission script file.
+namd_stash_run.sh #Job execution script file.
+ubq.pdb #Input pdb file for NAMD.
+ubq.psf #Input file for NAMD.
+~~~
+
+We need two files in order to successfully run the simulation. 
+The file `par_all27_prot_lipid.inp` which is the parameter file and is required for 
+the NAMD simulations. The other file needed is `ubq_gbis_eq.conf` which has
+the input configuration for the NAMD simulations.  
+
+> #### Challenges
+>
+> * You can find the missing files at https://stash.osgconnect.net/+sthapa/tutorial-namd , download the files from that website and upload it to the tutorial-namd file on Crane.
+
+ Now submit the NAMD job. 
+
+ ~~~
+ $ condor_submit namd_run.submit 
+ ~~~
+
+ Once the job completes, you will see non-empty `ubq_gbis_eq.0.log`
+ file where the standout output from the programs is written.
+
+> #### Challenges
+>
+> * Download the output file from the NAMD job to your laptop and view it.  Try
+> using a different method to transfer the file than before.
+
+
+You should see:
+
+ ~~~
+ $ tail  ubq_gbis_eq.0.log
+
+ WallClock: 6.084453  CPUTime: 6.084453  Memory: 53.500000 MB
+ Program finished.
+ ~~~
+
+ The above lines indicate the NAMD simulation was successful. 
 
 <div class="keypoints" markdown="1">
 
